@@ -1,0 +1,1 @@
+web: java -jar target/excel-reader-application.jar

@@ -1,46 +1,51 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>חלוקה לקבוצות</title>
+    <title>Excel Data Fetcher</title>
 </head>
 <body>
-    <h1>הזן 24 שמות</h1>
-    <form id="namesForm">
-        <div id="namesInputs">
-            <!-- כאן נוסיף את שדות הקלט לשמות -->
-            <input type="text" name="name" placeholder="שם 1" required><br>
-            <input type="text" name="name" placeholder="שם 2" required><br>
-            <input type="text" name="name" placeholder="שם 3" required><br>
-            <input type="text" name="name" placeholder="שם 4" required><br>
-            <input type="text" name="name" placeholder="שם 5" required><br>
-            <input type="text" name="name" placeholder="שם 6" required><br>
-            <input type="text" name="name" placeholder="שם 7" required><br>
-            <input type="text" name="name" placeholder="שם 8" required><br>
-            <input type="text" name="name" placeholder="שם 9" required><br>
-            <input type="text" name="name" placeholder="שם 10" required><br>
-            <input type="text" name="name" placeholder="שם 11" required><br>
-            <input type="text" name="name" placeholder="שם 12" required><br>
-            <input type="text" name="name" placeholder="שם 13" required><br>
-            <input type="text" name="name" placeholder="שם 14" required><br>
-            <input type="text" name="name" placeholder="שם 15" required><br>
-            <input type="text" name="name" placeholder="שם 16" required><br>
-            <input type="text" name="name" placeholder="שם 17" required><br>
-            <input type="text" name="name" placeholder="שם 18" required><br>
-            <input type="text" name="name" placeholder="שם 19" required><br>
-            <input type="text" name="name" placeholder="שם 20" required><br>
-            <input type="text" name="name" placeholder="שם 21" required><br>
-            <input type="text" name="name" placeholder="שם 22" required><br>
-            <input type="text" name="name" placeholder="שם 23" required><br>
-            <input type="text" name="name" placeholder="שם 24" required><br>
-        </div>
-        <button type="submit">חלק לקבוצות</button>
+    <h1>Enter up to 10 numbers:</h1>
+    <form id="dataForm">
+        <input type="number" name="number1" required>
+        <input type="number" name="number2">
+        <input type="number" name="number3">
+        <input type="number" name="number4">
+        <input type="number" name="number5">
+        <input type="number" name="number6">
+        <input type="number" name="number7">
+        <input type="number" name="number8">
+        <input type="number" name="number9">
+        <input type="number" name="number10">
+        <button type="submit">Get Data</button>
     </form>
 
-    <h2>הקבוצות</h2>
-    <div id="groups"></div>
+    <div id="result"></div>
 
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const numbers = [];
+            for (let i = 1; i <= 10; i++) {
+                const input = document.querySelector(`input[name="number${i}"]`);
+                if (input && input.value) {
+                    numbers.push(parseInt(input.value));
+                }
+            }
+
+            fetch(`/getData?numbers=${numbers.join(',')}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = '';
+                    data.forEach(item => {
+                        const p = document.createElement('p');
+                        p.textContent = `מספר: ${item['מספר']}, כינוי: ${item['כינוי']}, שם: ${item['שם']}, רמה: ${item['רמה']}`;
+                        resultDiv.appendChild(p);
+                    });
+                });
+        });
+    </script>
 </body>
 </html>
